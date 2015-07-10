@@ -1,0 +1,180 @@
+require(plyr)
+require(pls)
+require(reshape2)
+require(dplyr)
+source("src/PCRFunction.R") ##genera la funcion de regresion de componentes principales
+
+DB <- read.csv("~/Downloads/indici.csv", stringsAsFactors=FALSE,encoding = "latin1") ## Lee la base de datos
+#Ejecuta la regression
+PC <- RegresionComponentesPrincipales(formula=Ancla.Compuesta ~
+            Personas.desaparecidas +
+            Homicidios.dolosos + 
+            Costos.de.la.delincuencia.en.los.negocios + 
+            Encarcelados.sin.sentencia + 
+            Confianza.en.la.policía + 
+            Índice.de.imparcialidad.de.las.cortes + 
+            Índice.de.independencia.del.poder.judicial + 
+            Índice.de.derechos.de.propiedad + 
+            Índice.de.piratería.informática + 
+            Índice.de.protección.a.acreedores + 
+            Tiempo.para.resolver.quiebras + 
+            Tiempo.medio.para.ejecutar.contratos + 
+            Índice.de.corrupción + 
+            Índice.de.estados.frágiles + 
+            Índice.de.Estado.de.Derecho + 
+            Fuentes.de.energía.no.contaminantes + 
+            Emisiones.de.CO2 + 
+            Población.expuesta.a.altos.niveles.de.contaminación + 
+            Aprovechamiento.de.residuos.y.combustibles.renovables + 
+            Agua.renovable.per.cápita..potencial. + 
+            Estrés.hídrico + 
+            Áreas.naturales.protegidas + 
+            Cambio.en.superficie.forestal + 
+            Uso.de.fertilizantes.en.la.agricultura + 
+            Uso.de.pesticidas.en.la.agricultura + 
+            Empresas.certificadas.como.limpias + 
+            Tragedias.ecológicas.por.intervención.humana + 
+            Vulnerabilidad.climática + 
+            Índice.de.GINI + 
+            Personas.por.debajo.de.la.línea.de.pobreza + 
+            Índice.global.de.brecha.de.género + 
+            Mujeres.en.la.PEA + 
+            Dependientes.de.la.PEA + 
+            Acceso.a.agua + 
+            Acceso.a.alcantarillado + 
+            Analfabetismo + 
+            Cobertura.en.nivel.preescolar + 
+            Escolaridad.promedio + 
+            Calidad.educativa + 
+            Nivel.de.inglés + 
+            Esperanza.de.vida + 
+            Mortalidad.infantil + 
+            Cobertura.de.vacunación + 
+            Embarazos.en.adolescentes + 
+            Impactos.en.salud.por.sobrepeso.y.obesidad. + 
+            Prevalencia.de.diabetes + 
+            Gasto.en.salud.por.cuenta.propia + 
+            Camas.de.hospital + 
+            Índice.de.estabilidad.política + 
+            Índice.de.libertades.políticas + 
+            Índice.de.factibilidad.de.conflicto.armado + 
+            Índice.de.interferencia.militar.en.el.estado.de.derecho.y.o.en.el.proceso.político + 
+            Índice.de.libertades.civiles + 
+            Índice.de.libertad.de.prensa + 
+            Participación.electoral + 
+            Índice.de.efectividad.del.gobierno + 
+            Efectividad.de.implementación.de.políticas.públicas + 
+            Miembro.de.Open.Government + 
+            Índice.de.calidad.de.gobierno.electrónico + 
+            Facilidad.para.abrir.una.empresa + 
+            Tiempo.de.altos.ejecutivos.a.temas.burocráticos + 
+            Tiempo.para.calcular.y.pagar.impuestos + 
+            Presupuesto.balanceado + 
+            Deuda.total.del.gobierno.central + 
+            Ingresos.fiscales + 
+            Impuesto.sobre.el.ingreso + 
+            Carga.impositiva + 
+            Edad.de.retiro + 
+            Índice.de.fleixibilidad.de.las.leyes.laborales + 
+            Índice.de.economía.informal + 
+            Productividad.media.del.trabajo + 
+            Crecimiento.de.la.productividad.total.de.los.factores + 
+            Productividad.del.capital.fijo + 
+            Productividad.laboral.en.el.sector.manufacturero + 
+            Productividad.agropecuaria + 
+            Eficiencia.energética + 
+            Cambio.en.inventarios + 
+            Índice.de.transparencia.y.regulación.de.la.propiedad.privada + 
+            Crecimiento.del.PIB + 
+            Crecimiento.promedio.del.PIB + 
+            Variabilidad.del.crecimiento.del.PIB + 
+            Inflación + 
+            Inflación.promedio + 
+            Variabilidad.de.la.inflación + 
+            Tasa.de.desempleo + 
+            Deuda.externa + 
+            Calificación.de.deuda + 
+            Activos.del.sector.financiero + 
+            Activos.de.los.depositantes + 
+            Reservas + 
+            Control.de.precios + 
+            Índice.de.libertad.para.competir + 
+            Seguridad.energética + 
+            Pérdidas.de.electricidad + 
+            Líneas.móviles + 
+            Usuarios.de.internet + 
+            Servidores.seguros.de.internet + 
+            Gasto.en.IT + 
+            Transporte.intraurbano.de.alta.capacidad + 
+            Carreteras.pavimentadas + 
+            Tránsito.aéreo.de.pasajeros + 
+            Índice.de.desempeño.logístico..transporte. + 
+            Índice.de.infraestructura.portuaria + 
+            Tráfico.portuario.de.contenedores + 
+            Penetración.del.sistema.financiero.privado + 
+            Spread.de.tasas + 
+            Capitalización.mercado.de.valores + 
+            Capitalización.mercado.de.valores..micro. + 
+            Cambio.en.empresas.listadas + 
+            Rotación.de.activos.bursátiles + 
+            Índice.de.competencia.de.Boone + 
+            Organizaciones.internacionales.a.las.que.pertenece + 
+            Acuerdos.comerciales + 
+            Socios.comerciales.efectivos + 
+            Apertura.comercial + 
+            Diversificación.de.las.exportaciones + 
+            Diversificación.de.las.importaciones + 
+            Barreras.ocultas.a.la.importación + 
+            Aranceles.agrícolas + 
+            Arancele.manufactureros + 
+            IED + 
+            IED.promedio + 
+            Variabilidad.de.la.IED + 
+            Ingresos.por.turismo + 
+            Llegadas.de.turistas + 
+            Gasto.militar + 
+            Gasto.en.investigación.y.desarrollo + 
+            Coeficiente.de.invención + 
+            Artículos.científicos.y.técnicos + 
+            Exportaciones.de.alta.tecnología + 
+            Índice.de.complejidad.económica + 
+            Empresas.nacionales.en.el.Fortune.500 + 
+            Empresas.con.ISO.9000 + 
+            Población.en.ciudades.grandes + 
+            PIB.servicios + 
+            Valor.agregado.de.la.agricultura,data=DB)
+
+
+print(summary(PC)) ##Examina cuantos CP para %80 de varianza (en este caso 7)
+
+#Genera funcion para extraer coeficientes, normalizarlos y pesarlos por su porcentaje de varianza
+ExtractCoef <- function(NCOMP){
+  TMP <- as.data.frame(coef(PC,NCOMP)) #Extrae componente numero NCOMP
+  Names <- row.names(TMP) 
+  TMP$Names <- Names
+  TMP$Normalized <- TMP[,1] / sum(TMP[,1],na.rm = TRUE) * 100 #Normaliza a escala 1-100
+  TMP$Peso <- (R2(PC)[1]$val[NCOMP+1])- R2(PC)[1]$val[NCOMP] #Extra el porcentaje de la varianza que aporta el componente NCOMP
+  TMP <- TMP[,c(2,1,3,4)]
+  TMP$PesoPonderado <- TMP$Normalized * TMP$Peso # Pondera el peso por el % de la varianza
+  # names(TMP) <- c("Variable",paste(names(TMP)[2:5],NCOMP,sep=""))  
+  names(TMP)[2] <- paste("PesosBruto",NCOMP,sep="")
+  TMP <- TMP[,c(1,5)]
+  TMP$Comp <- NCOMP
+  return(TMP)
+  }
+
+#Estas lineas extraen los 7 componentes y sus coeficientes y sacan el peso ponderado de cada variable
+Pesos <- rbind_all(lapply(1:7,ExtractCoef)) %>% mutate(Names=paste(formatC(rep(1:136,7),width = 3,flag = 0),Names,sep=" ")) %>%
+  group_by(Names) %>% summarise(Peso=sum(PesoPonderado,na.rm = TRUE)) %>% 
+  mutate(Peso=Peso / sum(Peso,na.rm=TRUE) * 100,PesoPretty = round(Peso,2))
+#Puedes ver que los pesos de comportan de manera relativamente normal
+plot(density(Pesos$Peso))
+
+#Une con los subindice y suma los pesos que cada subidince trae al modelo de acuerdo a las variables que tiene dentro 
+Pesos$Subindice <- t(read.csv("data/subindices2LM.csv", stringsAsFactors=FALSE, header=FALSE,encoding = "latin1"))
+PesosSubindice <- Pesos %>% group_by(Subindice) %>% summarise(Peso= sum(Peso,na.rm=TRUE)) %>% arrange(desc(Peso))
+
+#Exporta
+write.csv(PesosSubindice, "data-out/PesosSubIndices2015.csv", row.names=FALSE)
+write.csv(Pesos, "data-out/PesosVariables2015.csv", row.names=FALSE)
+remove(DB,PC,ExtractCoef)

@@ -102,3 +102,16 @@ function (formula, ncomp, Y.add, data, subset, na.action, method = pls.options()
     z$y <- Y
   z
 }
+
+RegresionComponentesPrincipales <- function (..., method = pls.options()$pcralg) 
+{
+  cl <- match.call()
+  cl$method <- match.arg(method, c("svdpc", "model.frame"))
+  cl[[1]] <- quote(pls::mvr)
+  res <- eval(cl, parent.frame())
+  if (cl$method != "model.frame") 
+    res$call[[1]] <- as.name("pcr")
+  if (missing(method)) 
+    res$call$method <- NULL
+  res
+}
